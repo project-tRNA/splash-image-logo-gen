@@ -14,7 +14,7 @@ namespace LogoGen
                 ShowUsage();
             }
             string logoFile = Environment.CurrentDirectory + "\\" + args[0];
-            string outputFile = Environment.CurrentDirectory + "\\" + args[0];
+            string outputFile = Environment.CurrentDirectory + "\\" + args[0] + ".splash";
             if (!File.Exists(logoFile)) {
                 Console.WriteLine(args[0] + ": File not found!");
                 return;
@@ -22,14 +22,19 @@ namespace LogoGen
             if (File.Exists(outputFile)) {
                 File.Delete(outputFile);
             }
-            Bitmap logo = new Bitmap(logoFile);
-            byte[] output = MakeLogoImage(logo);
-            FileStream stream = new FileStream(outputFile, FileMode.CreateNew, FileAccess.Write);
-            stream.Write(output,0,output.Length);
-            stream.Flush();
-            stream.Close();
-            stream.Dispose();
-            Console.WriteLine(args[0] + ".splash: File saved successfully!");
+            try { 
+                Bitmap logo = new Bitmap(logoFile);
+                byte[] output = MakeLogoImage(logo);
+                FileStream stream = new FileStream(outputFile, FileMode.CreateNew, FileAccess.Write);
+                stream.Write(output,0,output.Length);
+                stream.Flush();
+                stream.Close();
+                stream.Dispose();
+                Console.WriteLine(args[0] + ".splash: File saved successfully!");
+            } catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
 
         public static void ShowUsage() {
